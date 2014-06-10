@@ -34,7 +34,11 @@ public class Settings extends Activity {
 		if (app.passwd != null) {
 			((EditText) findViewById(R.id.passwdedit)).setText( app.passwd );
 		}
-	}
+        if (app.agentID != null) {
+            ((EditText) findViewById(R.id.agentedit)).setText( app.agentID );
+        }
+
+    }
 
 	public void saveSettings(View view) {
 
@@ -42,6 +46,7 @@ public class Settings extends Activity {
 		app.port = ((EditText) findViewById(R.id.portedit)).getText().toString();
 		app.user = ((EditText) findViewById(R.id.useredit)).getText().toString();
 		app.passwd = ((EditText) findViewById(R.id.passwdedit)).getText().toString();
+        app.agentID = ((EditText) findViewById(R.id.agentedit)).getText().toString();
 
       SharedPreferences settings = getSharedPreferences(app.PREFS_NAME, 0);
       SharedPreferences.Editor editor = settings.edit();
@@ -49,6 +54,7 @@ public class Settings extends Activity {
       editor.putString("port",     app.port);
       editor.putString("user",     app.user);
 		editor.putString("password", app.passwd);
+        editor.putString("agentID",app.agentID);
       editor.commit();
 
 		finish();

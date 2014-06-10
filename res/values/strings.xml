@@ -27,7 +27,8 @@ http://openintents.org.</string>
 	<string name="server_host"   >Server host</string>
 	<string name="server_port"   >Server port</string>
 	<string name="user"          >User</string>
-	<string name="password"      >Password</string>
+    <string name="password"      >Password</string>
+	<string name="agentId"       >AgentID</string>
 	<string name="credentialInfo">Do not use the credentials for the digest login. It will not work. Use a normal login instead.</string>
 	<string name="save"          >Save</string>
 	<string name="ok"            >OK</string>

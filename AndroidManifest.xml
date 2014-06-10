@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="de.larskiesow.andca"
+	package="de.virtuos.andca"
 	android:versionCode="1"
 	android:versionName="1.0">
 
 	<application 
-		android:name="AndCAApplication" 
+		android:name="de.larskiesow.andca.AndCAApplication"
 		android:label="@string/app_name" 
 		android:icon="@drawable/ic_launcher">
 
 		<activity
-			android:name="AndCA"
+			android:name="de.larskiesow.andca.AndCA"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,7 @@
 		</activity>
 
 		<activity
-			android:name=".Settings"
+			android:name="de.larskiesow.andca.Settings"
 			android:label="@string/settings" >
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"

@@ -7,7 +7,8 @@ public class AndCAApplication extends Application {
 
 	public static final String PREFS_NAME = "AndCAPrefs";
 
-	public String host;
+	public String agentID;
+    public String host;
 	public String port;
 	public String user;
 	public String passwd;

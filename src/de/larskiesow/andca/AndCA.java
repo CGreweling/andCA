@@ -43,6 +43,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.net.Uri;
 import android.database.Cursor;
 import android.util.Log;
@@ -79,6 +82,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import de.larskiesow.andca.Controller.IcalList;
+
 
 public class AndCA extends Activity
 {
@@ -90,6 +95,8 @@ public class AndCA extends Activity
 	private static final int ACTION_TAKE_VIDEO  = 200;
 	private static final int ACTION_SELECT_FILE = 2;
     static final int REQUEST_VIDEO_CAPTURE = 1;
+    int repeatInterval = 30000; // 30 sec
+    Timer repeatTask = new Timer();
 
 
     /** Called when the activity is first created. */
@@ -109,6 +116,7 @@ public class AndCA extends Activity
 		app.port   = settings.getString("port",     "8080");
 		app.user   = settings.getString("user",     "admin");
 		app.passwd = settings.getString("password", "opencast");
+        app.agentID = settings.getString("AgentID", "GCMobile-rekorder-31-e06");
 
 		/* Set listener for edit fields */
 		TextWatcher t = new TextWatcher(){
@@ -118,6 +126,19 @@ public class AndCA extends Activity
 		};
 		((EditText) findViewById(R.id.set_title)).addTextChangedListener(t);
 		((EditText) findViewById(R.id.set_creator)).addTextChangedListener(t);
+
+
+
+        //repeatTask
+        repeatTask.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+           Log.d("IcalCore",new IcalList().getIcalFromMatterhornCore(app));
+                Log.d("IcalCore","http://" + app.host + ":" + app.port + "/recordings/calendars?agentid="+app.agentID);
+
+            }
+        }, 0, repeatInterval);
 
 	}
 
@@ -270,9 +291,6 @@ public class AndCA extends Activity
     }
 
 
-
-
-
 	public String getPath(Uri uri) {
 		if ( "content".equals(uri.getScheme()) ) {
 			String[] projection = { MediaStore.Images.Media.DATA };
@@ -337,20 +355,20 @@ public class AndCA extends Activity
 		}
 	}
 
-
 	private class IngestTask extends AsyncTask <Void, Void, String>{
 		@Override
 		protected String doInBackground(Void... unsued) {
 
-			DefaultHttpClient httpClient = new DefaultHttpClient();
+
 
 			String title   = ((EditText) findViewById(R.id.set_title)).getText().toString();
 			String creator = ((EditText) findViewById(R.id.set_creator)).getText().toString();
-
+            DefaultHttpClient httpClient = new DefaultHttpClient();
 
 			try {
 				/* First login to the MH core server */
 				HttpPost httppost = new HttpPost("http://" + app.host + ":" + app.port + "/j_spring_security_check");
+
 
 				List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 				nvps.add(new BasicNameValuePair("j_username", app.user));
@@ -389,6 +407,7 @@ public class AndCA extends Activity
 			}
 		}
 
+
 		@Override
 		protected void onProgressUpdate(Void... unsued) {}
 
@@ -406,5 +425,14 @@ public class AndCA extends Activity
 			}
 		}
 	}
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(repeatTask != null){
+            repeatTask.cancel();
+        }
+    }
+
 
 }
